@@ -1,18 +1,18 @@
 # include <stdio.h>
 
-//ç±»Windowsä¸­system("pause")
+//ÀàWindowsÖĞsystem("pause")
 void pause() {
 
-    printf("\nè¾“å…¥ä»»æ„é”®ç»§ç»­...\n");
+    printf("\nÊäÈëÈÎÒâ¼ü¼ÌĞø...\n");
     getchar();
 }
 
-//å¹¶åˆ¤æ–­æ˜¯å¦æ‰“å¼€æˆåŠŸ
+//²¢ÅĞ¶ÏÊÇ·ñ´ò¿ª³É¹¦
 FILE *open_file(char *path, char *type) {
 
     FILE *fp = fopen(path, type);
     if(fp==NULL){
-        printf("æ–‡ä»¶æ‰“å¼€å¤±è´¥ï¼");
+        printf("ÎÄ¼ş´ò¿ªÊ§°Ü£¡.");
         return NULL;
     }
     return fp;

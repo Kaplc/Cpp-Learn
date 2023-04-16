@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
@@ -71,7 +71,7 @@ void read_to_calculate() {
 
 void run_calculate() {
     int count = 0;
-    printf("请输入生成表达式数目：");
+    printf("请输入生成表达式数目:");
     scanf("%d", &count);
     generator_data_to_write(count);
     read_to_calculate();
