@@ -1,0 +1,6 @@
+# ninja log v5
+11	373	7033663179573999	CMakeFiles/cpp_learn.dir/src/utility.c.obj	310c51019d479312
+7	375	7033663179573999	CMakeFiles/cpp_learn.dir/src/learn_struct.c.obj	f190ffd29f7042a
+4	375	7033663180092616	CMakeFiles/cpp_learn.dir/main.c.obj	973641bac555c70e
+0	376	7033663180112559	CMakeFiles/cpp_learn.dir/src/calculate.c.obj	b83a89abea3d1803
+376	816	7033663184171705	cpp_learn.exe	c8d324874cb3d4cb
