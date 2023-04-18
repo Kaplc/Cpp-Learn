@@ -7,7 +7,7 @@
 *.o
 *.obj
 *.idea
-
+out
 # Precompiled Headers
 *.gch
 *.pch
