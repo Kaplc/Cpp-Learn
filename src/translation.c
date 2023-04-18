@@ -14,7 +14,7 @@ WORD* loan_dict() {
 
 	if (!fp) {
 		printf("词典未找到,请检查词典位置!\n程序自动关闭...");
-		exit();
+		exit(1);
 	}
 
 	WORD* words = (WORD*)malloc(sizeof(WORD) * DICT_LINE); // 创建结构体数组
@@ -37,8 +37,8 @@ WORD* loan_dict() {
 				break;
 			}
 		}
-		
-		words[i].english = (char*)malloc(sizeof(strlen(buf_eng + 1)));
+
+		words[i].english = (char*)malloc(strlen(buf_eng)+1);
 		strcpy(words[i].english, buf_eng);
 
 		// 中文
@@ -52,7 +52,7 @@ WORD* loan_dict() {
 				break;
 			}
 		}
-		words[i].chinese = (char*)malloc(sizeof(strlen(buf_chi+1)));
+		words[i].chinese = (char*)malloc(strlen(buf_chi));
 		strcpy(words[i].chinese, buf_eng);
 	}
 
