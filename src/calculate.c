@@ -66,7 +66,7 @@ void read_to_calculate() {
     rewind(fp); // 光标移动到开头
     fputs(buf, fp);
     fclose(fp);
-    printf("计算完成");
+    printf("计算完成\n");
 }
 
 void run_calculate() {

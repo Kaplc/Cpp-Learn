@@ -3,13 +3,17 @@
 #include <string.h>
 #include "header/calculate.h"
 #include "header/utility.h"
-
+#include "header/translation.h"
 
 //程序入口
 int main() {
-    run_calculate();
+	// 四则运算
+	//run_calculate();
 
-    pause();
+	// 快译通
+	run_translations();
 
-    return 0;
+	//pause();
+	system("pause");
+	return 0;
 }
