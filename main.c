@@ -8,10 +8,10 @@
 //程序入口
 int main() {
 	// 四则运算
-	//run_calculate();
+	run_calculate();
 
 	// 快译通
-	run_translations();
+//	run_translations();
 
 	//pause();
 	system("pause");
