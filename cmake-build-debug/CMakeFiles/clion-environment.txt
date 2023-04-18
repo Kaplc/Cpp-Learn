@@ -1,4 +1,0 @@
-ToolSet: 5.0 (local)@E:\Develop\mingw
-Options: 
-
-Options:
