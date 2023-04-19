@@ -1,68 +1,73 @@
 #include<stdio.h>
-#define DICT_PATH "G:\\project\\cpp_learn\\file\\dict.txt"
+#include <stdlib.h>
+#include <string.h>
+
+#define DICT_PATH "../file/dict.txt"
+//#define DICT_PATH "G:\\project\\cpp_learn\\file\\dict.txt"
 #define DICT_LINE 11102
 
-typedef struct word
-{
-	char* english;
-	char* chinese;
-}WORD;
+typedef struct word {
+    char *english;
+    char *chinese;
+} WORD;
 
-WORD* loan_dict() {
+WORD *loan_dict() {
 
-	FILE* fp = fopen(DICT_PATH, "r");
+    FILE *fp = fopen(DICT_PATH, "r");
 
-	if (!fp) {
-		printf("´ÊµäÎ´ÕÒµ½,Çë¼ì²é´ÊµäÎ»ÖÃ!\n³ÌÐò×Ô¶¯¹Ø±Õ...");
-		exit();
-	}
+    if (!fp) {
+        printf("ï¿½Êµï¿½Î´ï¿½Òµï¿½,ï¿½ï¿½ï¿½ï¿½Êµï¿½Î»ï¿½ï¿½!\nï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½Ø±ï¿½...");
+        exit(0);
+    }
 
-	WORD* words = (WORD*)malloc(sizeof(WORD) * DICT_LINE); // ´´½¨½á¹¹ÌåÊý×é
-	
-	for (int i = 0; i < DICT_LINE; i++) {
+    WORD *words = (WORD *) malloc(sizeof(WORD) * DICT_LINE); // ï¿½ï¿½ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-		char buf_eng[1024] = { 0 };
-		char buf_chi[1024] = { 0 };
-		char* once_line = NULL;
-		char* next_line = NULL;
+    for (int i = 0; i < DICT_LINE; i++) {
 
-		// Ó¢ÎÄ
-		once_line = fgets(buf_eng, sizeof(buf_eng), fp); // ¶ÁÈ¡µÄÃ¿Ò»ÐÐ
+        char buf_eng[1024] = {0};
+        char buf_chi[1024] = {0};
+        char *once_line = NULL;
+        char *next_line = NULL;
 
-		if (!once_line)return; // ¶ÁÈ¡µ½Ä©Î²
+        // Ó¢ï¿½ï¿½
+        once_line = fgets(buf_eng, sizeof(buf_eng), fp); // ï¿½ï¿½È¡ï¿½ï¿½Ã¿Ò»ï¿½ï¿½
 
-		for (int end = strlen(buf_eng)-1; 1; end--) { // ¹ýÂË
-			if (!(*(buf_eng + end) == ' ' || *(buf_eng + end) == '\t' || *(buf_eng + end) == '\n')) { // ×Ö·û´®ÒÆ¶¯Î²²¿Ö¸Õë²éÕÒÓÐÐ§×Ö·û
-				*(buf_eng + (end + 1)) = 0; // ÖØ¶¨Òå×Ö·û´®½áÎ²´¦
-				break;
-			}
-		}
-		
-		words[i].english = (char*)malloc(sizeof(strlen(buf_eng + 1)));
-		strcpy(words[i].english, buf_eng);
+        if (!once_line)return NULL; // ï¿½ï¿½È¡ï¿½ï¿½Ä©Î²
 
-		// ÖÐÎÄ
-		next_line = fgets(buf_chi, sizeof(buf_chi), fp);// ÏÂÒ»ÐÐ
+        for (int end = strlen(buf_eng) - 1; 1; end--) { // ï¿½ï¿½ï¿½ï¿½
+            if (!(*(buf_eng + end) == ' ' || *(buf_eng + end) == '\t' ||
+                  *(buf_eng + end) == '\n')) { // ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½Î²ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½Ö·ï¿½
+                *(buf_eng + (end + 1)) = 0; // ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Î²ï¿½ï¿½
+                break;
+            }
+        }
 
-		if (!next_line)return;
+        words[i].english = (char *) malloc(strlen(buf_eng) + 1);
+        strcpy(words[i].english, buf_eng + 1); // ç§»åŠ¨æŒ‡é’ˆåŽ»é™¤
 
-		for (int end = strlen(buf_chi); 1; end--) { // ¹ýÂË
-			if (!(*(buf_chi + end) == " " || *(buf_chi + end) == "\t" || *(buf_chi + end) == "\n")) { // ×Ö·û´®ÒÆ¶¯Î²²¿Ö¸Õë²éÕÒÓÐÐ§×Ö·û
-				*(buf_chi + (end + 1)) = 0; // ÖØ¶¨Òå×Ö·û´®½áÎ²´¦
-				break;
-			}
-		}
-		words[i].chinese = (char*)malloc(sizeof(strlen(buf_chi+1)));
-		strcpy(words[i].chinese, buf_eng);
-	}
+        // ï¿½ï¿½ï¿½ï¿½
+        next_line = fgets(buf_chi, sizeof(buf_chi), fp);// ï¿½ï¿½Ò»ï¿½ï¿½
 
-	return words;
+        if (!next_line)return NULL;
+
+        for (int end = strlen(buf_chi); 1; end--) { // ï¿½ï¿½ï¿½ï¿½
+            if (!(*(buf_chi + end) == ' ' || *(buf_chi + end) == '\t' ||
+                  *(buf_chi + end) == '\n')) { // ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½Î²ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½Ö·ï¿½
+                *(buf_chi + (end + 1)) = 0; // ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Î²ï¿½ï¿½
+                break;
+            }
+        }
+        words[i].chinese = (char *) malloc(strlen(buf_chi) + 1);
+        strcpy(words[i].chinese, buf_chi + 5);
+    }
+
+    return words;
 }
 
 void get_word(char word[], int size) {
-	printf("ÇëÊäÈëÒª·­ÒëÖÐÎÄ:");
-	char* p_word = fgets(word, size, stdin); // stdin¶ÁÈ¡×Ö·û´®²¢Ð´Èëword[]
-	if (!p_word)exit();
+    printf("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:");
+    char *p_word = fgets(word, size, stdin); // stdinï¿½ï¿½È¡ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½word[]
+    if (!p_word)exit(0);
 }
 
 void serch_dict() {
@@ -70,11 +75,11 @@ void serch_dict() {
 }
 
 void run_translations(void) {
-	char word[1024] = { 0 };
-	WORD* words = NULL;
+    char word[1024] = {0};
+    WORD *words = NULL;
 
-	words = loan_dict();
-	get_word(word, sizeof(word));
-	serch_dict(words);
+    words = loan_dict();
+    get_word(word, sizeof(word));
+    serch_dict(words);
 
 }
