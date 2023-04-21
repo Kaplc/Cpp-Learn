@@ -14,6 +14,6 @@ int main() {
 	run_translations();
 
 	//pause();
-	system("pause");
+//	system("pause");
 	return 0;
 }

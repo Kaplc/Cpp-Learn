@@ -1,21 +1,22 @@
 #include<stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>
+#include <ctype.h>
+//#include <windows.h>
 
-#define DICT_PATH "../file/dict.txt"
+#define DICT_PATH "../cpp_learn/file/dict.txt"
 //#define DICT_PATH "G:\\project\\cpp_learn\\file\\dict.txt"
-#define DICT_LINE 11102
+#define DICT_LINE 111102
 
 typedef struct once_word {
-    char *english;
-    char *chinese;
+    char *word;
+    char *trans;
 } ONCE_WORD;
 
 int str_filter_start(char buf[]) {
     // 去除开头
     for (int i = 0; i < strlen(buf); ++i) {
-        if (*(buf + i) == ' ') {
+        if (*(buf + i) == ':') {
             return i;
         }
     }
@@ -51,26 +52,25 @@ ONCE_WORD *loan_dict() {
         char *once_line = NULL;
         char *next_line = NULL;
 
-        // 读取英文
         once_line = fgets(buf_eng, sizeof(buf_eng), fp); // 读取单行
 
         if (!once_line)return NULL; // 检测到行尾
 
         str_filter_end(buf_eng); // 过滤器
 
-        p_dict[i].english = (char *) malloc(strlen(buf_eng) + 1);
-        strcpy(p_dict[i].english, buf_eng + 1); // 移动指针去除
+        p_dict[i].word = (char *) malloc(strlen(buf_eng) + 1);
+        strcpy(p_dict[i].word, buf_eng + 1); // 移动指针去除
 
-        // 中文
-        next_line = fgets(buf_chi, sizeof(buf_chi), fp);// 下一行
+        // 下一行
+        next_line = fgets(buf_chi, sizeof(buf_chi), fp);
 
         if (!next_line)return NULL;
 
         str_filter_end(buf_chi);
         start = str_filter_start(buf_chi); // 去除开头
 
-        p_dict[i].chinese = (char *) malloc(strlen(buf_chi) + 1 - start);
-        strcpy(p_dict[i].chinese, buf_chi + start + 1);
+        p_dict[i].trans = (char *) malloc(strlen(buf_chi) + 1 - start);
+        strcpy(p_dict[i].trans, buf_chi + start + 1);
     }
 
     return p_dict;
@@ -78,7 +78,7 @@ ONCE_WORD *loan_dict() {
 
 void get_word(char word[], int size) {
 
-    SetConsoleOutputCP(CP_UTF8); // windows下控制台编码
+//    SetConsoleOutputCP(CP_UTF8); // windows下控制台编码
     printf("请输入要翻译的内容:");
     fflush(stdout);
     fgets(word, size, stdin);
@@ -86,22 +86,39 @@ void get_word(char word[], int size) {
 
 }
 
-char *query_dict(ONCE_WORD *p_dict, char word[]) {
+void eng_compare() {
+
+}
+
+char *query_dict(ONCE_WORD *p_dict, char input_word[]) {
+    int is_letter = 1;
+    int dict_word_cur = 0; //字典单词大游标
+    int input_word_cur = 0; // 输入单词游标
+    int dict_word_subcur = 0; // 字典单词小游标
     char *p_res = NULL;
     char test[1024] = {1};
+
     for (int i = 0; i < DICT_LINE; i++) {
 
-        // 先搜索中文查到返回英文
-        if (strstr(p_dict[i].chinese, word)){
-            p_res = p_dict[i].english;
-            strcpy(test, p_dict[i].english);
-            fflush(stdout);
-            return p_res;
+        // 游标置零
+        dict_word_cur = 0;
+        input_word_cur = 0;
+        dict_word_subcur = 0;
+
+        while (dict_word_cur < strlen(p_dict[i].word)) {
+            while (*(p_dict[i].word + dict_word_subcur) == *(input_word + input_word_cur)) {
+                dict_word_subcur++;
+                input_word_cur++;
+                if (*(p_dict[i].word + dict_word_subcur) == 0 && *(input_word + input_word_cur) == 0){
+                    p_res = p_dict[i].trans;
+                    return p_res;
+                }
+            }
+            input_word_cur = 0;
+            dict_word_subcur = dict_word_cur++;
         }
-        if (strstr(p_dict[i].english, word)){
-            p_res = p_dict[i].chinese;
-            return p_res;
-        }
+
+
     }
     return NULL;
 }
@@ -112,11 +129,17 @@ void run_translations(void) {
     ONCE_WORD *p_dict = NULL;
 
     p_dict = loan_dict(); // 加载字典
+    for (int i = 0; i < 50; ++i) {
+        get_word(word, sizeof(word)); // 加载键盘
+        p_res = query_dict(p_dict, word); // 查询
 
-    get_word(word, sizeof(word)); // 加载键盘
-    p_res = query_dict(p_dict, word); // 查询
+        if (p_res == NULL) {
+            printf("未找到!\n");
+            continue;
+        }
+        printf("%s\n", p_res);
+        fflush(stdout);
+    }
 
-    printf("%s\n", p_res);
-    fflush(stdout);
 
 }
