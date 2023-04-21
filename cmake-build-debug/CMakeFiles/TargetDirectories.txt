@@ -1,3 +1,0 @@
-/home/kaplc/CLionProjects/cpp_learn/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/kaplc/CLionProjects/cpp_learn/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/kaplc/CLionProjects/cpp_learn/cmake-build-debug/CMakeFiles/cpp_learn.dir
