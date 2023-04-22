@@ -5,13 +5,14 @@
 #include <windows.h>
 #include <time.h>
 #include <unistd.h>
+#include <conio.h>
 
 #include "../header/greedy_snake.h"
 
 
 #define MAP_X 100
 #define MAP_Y 25
-#define SPEED 10
+#define SPEED 6
 
 typedef struct body {
     int body_x;
@@ -42,6 +43,37 @@ void add_body(SNAKE *snake) {
     }
 }
 
+void read_keyboard(SNAKE *snake) {
+    char key;
+    while (_kbhit()) //判断是否按下按键,按下不等于0
+    {
+        key = _getch();
+//        key = 'a';
+        switch (key) {
+            case 'w':
+                if (snake->dx == 0 && snake->dy == 1)break; // 与行驶方向相反不进行操作
+                snake->dx = 0;
+                snake->dy = -1;
+                break;
+            case 's':
+                if (snake->dx == 0 && snake->dy == -1)break;
+                snake->dx = 0;
+                snake->dy = 1;
+                break;
+            case 'a':
+                if (snake->dx == 1 && snake->dy == 0)break;
+                snake->dx = -1;
+                snake->dy = 0;
+                break;
+            case 'd':
+                if (snake->dx == -1 && snake->dy == 0)break;
+                snake->dx = 1;
+                snake->dy = 0;
+                break;
+        }
+    }
+}
+
 void cls_tail(SNAKE *snake) {
     /*移动前清除尾部*/
     // 取尾部坐标
@@ -65,6 +97,7 @@ void snake_moving(SNAKE *snake) {
     /*更新头和身体的坐标*/
 
     while (TRUE) {
+        read_keyboard(snake);
         cls_tail(snake);
         // 更新身体坐标
         for (int i = (snake->body_count - 1); i > 0; i--) {
@@ -86,7 +119,7 @@ void snake_moving(SNAKE *snake) {
 }
 
 void print_snake(SNAKE *snake) {
-    /*打印蛇*/
+    /*打印蛇和食物*/
     // <windows.h>设置光标位置
     COORD coord;
 //    system("cls");
@@ -104,19 +137,13 @@ void print_snake(SNAKE *snake) {
         }
     }
 
-
-}
-
-void print_food(int x, int y, char symbol) {
-    /*打印食物*/
-    // <windows.h>设置光标位置
-    COORD coord;
-    coord.X = x;
-    coord.Y = y;
+    coord.X = snake->food_x;
+    coord.Y = snake->food_y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-    printf("%c", symbol);
-    fflush(stdout);
+    printf("%c", '$');
+
 }
+
 
 void generate_food(SNAKE *snake) {
     /*随机生成食物*/
@@ -129,7 +156,7 @@ void generate_food(SNAKE *snake) {
 
 }
 
-SNAKE *init_snake() {
+void init_snake(SNAKE **ppsnake) {
     /*初始化蛇*/
     SNAKE *snake = (SNAKE *) calloc(1, sizeof(SNAKE));
     // 初始化头部和两节身体
@@ -144,11 +171,10 @@ SNAKE *init_snake() {
     snake->dy = 0;
     // 生成食物
     generate_food(snake);
-    // 打印
-    print_food(snake->food_x, snake->food_y, '$'); //打印食物
+    // 打印蛇和食物
     print_snake(snake);
 
-    return snake;
+    *ppsnake = snake;
 }
 
 void generate_map() {
@@ -182,16 +208,15 @@ void generate_map() {
     }
 }
 
-SNAKE *init_game() {
+void init_game(SNAKE **ppsnake) {
     /*初始化游戏*/
-    SNAKE *snake;
     generate_map(); // 生成地图
-    snake = init_snake(); // 初始化蛇
-    return snake;
+    init_snake(ppsnake); // 初始化蛇
+
 }
 
 void run_greedy_snake() {
-    SNAKE *snake;
-    snake = init_game(); // 初始化游戏
+    SNAKE *snake = NULL;
+    init_game(&snake); // 初始化游戏
     snake_moving(snake);
 }
