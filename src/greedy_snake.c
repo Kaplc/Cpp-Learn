@@ -10,7 +10,7 @@
 #include "../header/greedy_snake.h"
 
 
-#define MAP_X 100
+#define MAP_X 60
 #define MAP_Y 25
 #define SPEED 6
 
@@ -35,12 +35,22 @@ typedef struct snake {
 
 void print_snake(SNAKE *snake);
 
+
 void add_body(SNAKE *snake) {
     snake->body_count++;
     snake->body = (BODY *) calloc(snake->body_count, sizeof(BODY));
     for (int body_num = 0; body_num < MAP_X * MAP_Y; ++body_num) {
 
     }
+}
+
+int collision_judgment(SNAKE *snake) {
+    /*墙碰撞判断*/
+    if (snake->body->body_x == 0 || snake->body->body_x == MAP_X-1 || snake->body->body_y == 0 ||
+        snake->body->body_y == MAP_Y-1) {
+        return 1;
+    }
+    return 0;
 }
 
 void read_keyboard(SNAKE *snake) {
@@ -98,6 +108,7 @@ void snake_moving(SNAKE *snake) {
 
     while (TRUE) {
         read_keyboard(snake);
+
         cls_tail(snake);
         // 更新身体坐标
         for (int i = (snake->body_count - 1); i > 0; i--) {
@@ -110,6 +121,9 @@ void snake_moving(SNAKE *snake) {
         (snake->body)->body_x += snake->dx;
         (snake->body)->body_y += snake->dy;
 
+        if (collision_judgment(snake)) {
+            break;
+        }
         print_snake(snake);
 
         usleep(1000000 / SPEED); // 休眠250毫秒, 单位微秒
@@ -217,6 +231,14 @@ void init_game(SNAKE **ppsnake) {
 
 void run_greedy_snake() {
     SNAKE *snake = NULL;
+
     init_game(&snake); // 初始化游戏
     snake_moving(snake);
+
+    COORD coord;
+    coord.X = MAP_X / 2 - 7;
+    coord.Y = MAP_Y + 2;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("游戏结束 分数:");
+
 }
