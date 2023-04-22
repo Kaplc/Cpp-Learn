@@ -112,7 +112,7 @@ char *query_dict(ONCE_WORD *p_dict, char input_word[]) {
             }
 
             input_word_cur = 0;// 输入单词游标回到开头
-//            dict_word_subcur = dict_word_cur++; // 字典单词游标下移, 并将浮动游标同步
+            dict_word_subcur = dict_word_cur++; // 字典单词游标下移, 并将浮动游标同步
 
         }
 
