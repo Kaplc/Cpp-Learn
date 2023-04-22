@@ -78,7 +78,7 @@ ONCE_WORD *loan_dict() {
 
 void get_word(char word[], int size) {
     char buf[1024] = {0};
-    printf("请输入要翻译的内容:");
+    printf("请输入要翻译的单词:");
     fflush(stdout);
     fgets(word, size, stdin);
     str_filter_end(word);// stdin中获取word[]
