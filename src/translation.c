@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-//#include <windows.h>
+#include <windows.h>
 
 #define DICT_PATH "../cpp_learn/file/dict.txt"
 //#define DICT_PATH "G:\\project\\cpp_learn\\file\\dict.txt"
@@ -77,8 +77,7 @@ ONCE_WORD *loan_dict() {
 }
 
 void get_word(char word[], int size) {
-
-//    SetConsoleOutputCP(CP_UTF8); // windows下控制台编码
+    char buf[1024] = {0};
     printf("请输入要翻译的内容:");
     fflush(stdout);
     fgets(word, size, stdin);
@@ -86,49 +85,49 @@ void get_word(char word[], int size) {
 
 }
 
-void eng_compare() {
-
-}
-
 char *query_dict(ONCE_WORD *p_dict, char input_word[]) {
-    int is_letter = 1;
     int dict_word_cur = 0; //字典单词大游标
     int input_word_cur = 0; // 输入单词游标
     int dict_word_subcur = 0; // 字典单词小游标
     char *p_res = NULL;
-    char test[1024] = {1};
 
     for (int i = 0; i < DICT_LINE; i++) {
 
-        // 游标置零
+        // 下组比较前游标置零
         dict_word_cur = 0;
         input_word_cur = 0;
         dict_word_subcur = 0;
 
-        while (dict_word_cur < strlen(p_dict[i].word)) {
-            while (*(p_dict[i].word + dict_word_subcur) == *(input_word + input_word_cur)) {
+        while (dict_word_cur < strlen(p_dict[i].word)) { // 字典单词游标不超过单词长度
+            while (*(p_dict[i].word + dict_word_subcur) == *(input_word + input_word_cur)) { // 字典单词浮动游标与输入单词游标进行比较,
+                // 相等移动都移动到下一位
                 dict_word_subcur++;
                 input_word_cur++;
-                if (*(p_dict[i].word + dict_word_subcur) == 0 && *(input_word + input_word_cur) == 0){
+
+                // 判断浮动和输入游标是否同时结尾
+                if (*(p_dict[i].word + dict_word_subcur) == 0 && *(input_word + input_word_cur) == 0) {
                     p_res = p_dict[i].trans;
                     return p_res;
                 }
             }
-            input_word_cur = 0;
-            dict_word_subcur = dict_word_cur++;
-        }
 
+            input_word_cur = 0;// 输入单词游标回到开头
+//            dict_word_subcur = dict_word_cur++; // 字典单词游标下移, 并将浮动游标同步
+
+        }
 
     }
     return NULL;
 }
 
 void run_translations(void) {
+     // 设置windows终端编码
     char *p_res = NULL;
     char word[1024] = {0};
     ONCE_WORD *p_dict = NULL;
 
     p_dict = loan_dict(); // 加载字典
+
     for (int i = 0; i < 50; ++i) {
         get_word(word, sizeof(word)); // 加载键盘
         p_res = query_dict(p_dict, word); // 查询
@@ -140,6 +139,4 @@ void run_translations(void) {
         printf("%s\n", p_res);
         fflush(stdout);
     }
-
-
 }

@@ -26,8 +26,11 @@ void generator_data_to_write(int count) {
         len = strlen(buf);
     }
 
-    fp = fopen("../temp_file/calculate.txt", "w"); // 打开文件
-    if (!fp)return; // 判断是否成功打开
+    fp = fopen("../cpp_learn/file/calculate.txt", "w"); // 打开文件
+    if (!fp){
+        printf("文件生成失败\n");
+        return; // 判断是否成功打开
+    }
     fputs(buf, fp); // 写入
     fclose(fp); // 关闭文件
     printf("文件生成成功\n");
@@ -41,8 +44,11 @@ void read_to_calculate() {
 
     FILE *fp = NULL;
 
-    fp = fopen("../temp_file/calculate.txt", "r+"); // 打开文件
-    if (!fp)return;
+    fp = fopen("../cpp_learn/file/calculate.txt", "r+"); // 打开文件
+    if (!fp){
+        printf("文件读取失败\n");
+        return;
+    }
 
     for (int len = 0; !feof(fp);) {
         fscanf(fp, "%d%c%d=\n", &num1, &sign, &num2); // 读文件拆包
@@ -71,7 +77,8 @@ void read_to_calculate() {
 
 void run_calculate() {
     int count = 0;
-    printf("请输入生成表达式数目:");
+    printf("请输入要生成的表达式数目:");
+    fflush(stdout);
     scanf("%d", &count);
     generator_data_to_write(count);
     read_to_calculate();
