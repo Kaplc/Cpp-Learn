@@ -31,6 +31,8 @@ typedef struct snake {
     int dx;
     int dy;
 
+    int score;
+
 } SNAKE;
 
 void print_snake(SNAKE *snake);
@@ -44,10 +46,15 @@ void add_body(SNAKE *snake) {
     }
 }
 
+int cal_score(SNAKE *snake) {
+    /*计算分数*/
+    snake->score += snake->body_count;
+}
+
 int collision_judgment(SNAKE *snake) {
     /*墙碰撞判断*/
-    if (snake->body->body_x == 0 || snake->body->body_x == MAP_X-1 || snake->body->body_y == 0 ||
-        snake->body->body_y == MAP_Y-1) {
+    if (snake->body->body_x == 0 || snake->body->body_x == MAP_X - 1 || snake->body->body_y == 0 ||
+        snake->body->body_y == MAP_Y - 1) {
         return 1;
     }
     return 0;
@@ -187,7 +194,8 @@ void init_snake(SNAKE **ppsnake) {
     generate_food(snake);
     // 打印蛇和食物
     print_snake(snake);
-
+    // 初始化分数
+    snake->score = 0;
     *ppsnake = snake;
 }
 
@@ -233,12 +241,12 @@ void run_greedy_snake() {
     SNAKE *snake = NULL;
 
     init_game(&snake); // 初始化游戏
-    snake_moving(snake);
-
+    snake_moving(snake); // 开始游戏
+    cal_score(snake); // 计算分数
     COORD coord;
     coord.X = MAP_X / 2 - 7;
     coord.Y = MAP_Y + 2;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-    printf("游戏结束 分数:");
+    printf("游戏结束 分数:%d", snake->score);
 
 }
