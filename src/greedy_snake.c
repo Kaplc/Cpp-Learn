@@ -46,6 +46,16 @@ void add_body(SNAKE *snake) {
     }
 }
 
+void cursor_print(int x, int y, int symbol) {
+    // <windows.h>设置光标位置
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    printf("%c", symbol);
+    fflush(stdout);
+}
+
 int cal_score(SNAKE *snake) {
     /*计算分数*/
     snake->score += snake->body_count;
@@ -58,15 +68,15 @@ int collision_judgment(SNAKE *snake) {
         return 1;
     }
     // 碰撞自身判断
-    int heard_x = snake->body->body_x;
-    int heard_y = snake->body->body_y;
     for (int i = 1; i < snake->body_count; ++i) {
         if (snake->body[0].body_x == snake->body[i].body_x && snake->body[0].body_y == snake->body[i].body_y) {
             return 1;
         }
     }
     // 头部碰到食物
+    if (snake->body[0].body_x == snake->food_x && snake->body[0].body_y == snake->food_y) {
 
+    }
     return 0;
 }
 
@@ -145,28 +155,24 @@ void read_keyboard(SNAKE *snake) {
 void cls_tail(SNAKE *snake) {
     /*移动前清除尾部*/
     // 取尾部坐标
-    COORD coord;
-    coord.X = snake->body[snake->body_count-1].body_x;
-    coord.Y = snake->body[snake->body_count-1].body_y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-    printf("%c", ' ');
-    fflush(stdout);
-
-
+    int tail_x = snake->body[snake->body_count - 1].body_x;
+    int tail_y = snake->body[snake->body_count - 1].body_y;
+    cursor_print(tail_x, tail_y, ' ');
 }
 
 void snake_moving(SNAKE *snake) {
     /*更新头和身体的坐标*/
 
     while (TRUE) {
+        // 读取按键
         read_keyboard(snake);
 
         cls_tail(snake);
         // 更新身体坐标
         for (int i = (snake->body_count - 1); i > 0; i--) {
             // 头自主更新, 3=2 2=1 1=0
-            snake->body[i].body_x = snake->body[i-1].body_x;
-            snake->body[i].body_y = snake->body[i-1].body_y;
+            snake->body[i].body_x = snake->body[i - 1].body_x;
+            snake->body[i].body_y = snake->body[i - 1].body_y;
 
         }
         // 更新头部坐标
@@ -186,27 +192,15 @@ void snake_moving(SNAKE *snake) {
 
 void print_snake(SNAKE *snake) {
     /*打印蛇和食物*/
-    // <windows.h>设置光标位置
-    COORD coord;
-    for (int i = 0; i < snake->body_count; ++i) {
-        coord.X = snake->body[i].body_x;
-        coord.Y = snake->body[i].body_y;
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 
-        if (i == 0) {
-            printf("%c", '@');
-            fflush(stdout);
-        } else {
-            printf("%c", 'o');
-            fflush(stdout);
+    for (int i = 0; i < snake->body_count; ++i) {
+        if (i == 0) { // 头部打印'@'
+            cursor_print(snake->body[i].body_x, snake->body[i].body_y, '@');
+
+        } else { // 身体打印'o'
+            cursor_print(snake->body[i].body_x, snake->body[i].body_y, 'o');
         }
     }
-
-    coord.X = snake->food_x;
-    coord.Y = snake->food_y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-    printf("%c", '$');
-
 }
 
 
@@ -218,7 +212,8 @@ void generate_food(SNAKE *snake) {
         snake->food_y = (rand() % MAP_Y) + 1;
     } while (!(snake->food_x >= 2 && snake->food_x <= MAP_X - 3 && snake->food_y >= 2 &&
                snake->food_y <= MAP_Y - 3)); // 判断生成在地图内
-
+    // 打印$
+    cursor_print(snake->food_x, snake->food_y, '$');
 }
 
 void init_snake(SNAKE **ppsnake) {
@@ -234,9 +229,9 @@ void init_snake(SNAKE **ppsnake) {
     // 初始化方向
     snake->dx = 1;
     snake->dy = 0;
-    // 生成食物
+    // 生成食物并打印
     generate_food(snake);
-    // 打印蛇和食物
+    // 打印蛇
     print_snake(snake);
     // 初始化分数
     snake->score = 0;
