@@ -57,6 +57,14 @@ int collision_judgment(SNAKE *snake) {
         snake->body->body_y == MAP_Y - 1) {
         return 1;
     }
+    // 碰撞自身判断
+    int heard_x = snake->body->body_x;
+    int heard_y = snake->body->body_y;
+    for (int i = 1; i < snake->body_count; ++i) {
+        if ((heard_x == ((snake->body) + i)->body_x) && (heard_y == ((snake->body) + i)->body_y)) {
+            return 1;
+        }
+    }
     return 0;
 }
 
@@ -65,7 +73,6 @@ void read_keyboard(SNAKE *snake) {
     while (_kbhit()) //判断是否按下按键,按下不等于0
     {
         key = _getch();
-//        key = 'a';
         switch (key) {
             case 'w':
                 if (snake->dx == 0 && snake->dy == 1)break; // 与行驶方向相反不进行操作
@@ -86,6 +93,48 @@ void read_keyboard(SNAKE *snake) {
                 if (snake->dx == -1 && snake->dy == 0)break;
                 snake->dx = 1;
                 snake->dy = 0;
+                break;
+            case 'W':
+                if (snake->dx == 0 && snake->dy == 1)break; // 与行驶方向相反不进行操作
+                snake->dx = 0;
+                snake->dy = -1;
+                break;
+            case 'S':
+                if (snake->dx == 0 && snake->dy == -1)break;
+                snake->dx = 0;
+                snake->dy = 1;
+                break;
+            case 'A':
+                if (snake->dx == 1 && snake->dy == 0)break;
+                snake->dx = -1;
+                snake->dy = 0;
+                break;
+            case 'D':
+                if (snake->dx == -1 && snake->dy == 0)break;
+                snake->dx = 1;
+                snake->dy = 0;
+                break;
+            case 72: // 上下左右键
+                if (snake->dx == 0 && snake->dy == 1)break; // 与行驶方向相反不进行操作
+                snake->dx = 0;
+                snake->dy = -1;
+                break;
+            case 80:
+                if (snake->dx == 0 && snake->dy == -1)break;
+                snake->dx = 0;
+                snake->dy = 1;
+                break;
+            case 75:
+                if (snake->dx == 1 && snake->dy == 0)break;
+                snake->dx = -1;
+                snake->dy = 0;
+                break;
+            case 77:
+                if (snake->dx == -1 && snake->dy == 0)break;
+                snake->dx = 1;
+                snake->dy = 0;
+                break;
+            default:
                 break;
         }
     }
@@ -181,7 +230,7 @@ void init_snake(SNAKE **ppsnake) {
     /*初始化蛇*/
     SNAKE *snake = (SNAKE *) calloc(1, sizeof(SNAKE));
     // 初始化头部和两节身体
-    snake->body_count = 3;
+    snake->body_count = 10;
     snake->body = (BODY *) calloc(snake->body_count, sizeof(BODY));
     for (int i = 0; i < 3; ++i) {
         ((snake->body) + i)->body_x = ((MAP_X - 2) / 2) - i;
