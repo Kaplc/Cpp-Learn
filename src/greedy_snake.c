@@ -12,7 +12,7 @@
 
 #define MAP_X 60
 #define MAP_Y 25
-#define SPEED 6
+#define SPEED 8
 
 typedef struct body {
     int body_x;
@@ -288,6 +288,7 @@ void init_game(SNAKE **ppsnake) {
 }
 
 void run_greedy_snake() {
+    system("cls");
     SNAKE *snake = NULL;
 
     init_game(&snake); // 初始化游戏
@@ -297,6 +298,5 @@ void run_greedy_snake() {
     coord.X = MAP_X / 2 - 7;
     coord.Y = MAP_Y + 2;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-    printf("游戏结束 分数:%d", snake->score);
-
+    printf("游戏结束 分数:%d\n", snake->score);
 }
