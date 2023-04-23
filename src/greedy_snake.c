@@ -36,7 +36,7 @@ typedef struct snake {
 } SNAKE;
 
 void print_snake(SNAKE *snake);
-
+void generate_food(SNAKE *snake);
 
 void add_body(SNAKE *snake) {
     snake->body_count++;
@@ -75,7 +75,7 @@ int collision_judgment(SNAKE *snake) {
     }
     // 头部碰到食物
     if (snake->body[0].body_x == snake->food_x && snake->body[0].body_y == snake->food_y) {
-
+        generate_food(snake); // 重新生成食物
     }
     return 0;
 }
