@@ -209,6 +209,7 @@ void print_snake(SNAKE *snake) {
 
 void generate_food(SNAKE *snake) {
     /*随机生成食物*/
+
     srand(time(NULL) + 1);
     snake->food_x = rand() % MAP_X + 1;
     snake->food_y = (rand() % MAP_Y) + 1;
@@ -217,8 +218,16 @@ void generate_food(SNAKE *snake) {
         snake->food_x = snake->food_x % MAP_X + 1;
         snake->food_y = (snake->food_y % MAP_Y) + 1;
     }
+
+    for (int i = 0; i < snake->body_count - 1; ++i) {
+        if (snake->food_x == snake->body[i].body_x && snake->food_y == snake->body[i].body_y) {
+            generate_food(snake);
+            break;
+        }
+    }
     // 打印$
     cursor_print(snake->food_x, snake->food_y, '$');
+
 }
 
 void init_snake(SNAKE **ppsnake) {
