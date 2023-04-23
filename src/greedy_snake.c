@@ -36,14 +36,15 @@ typedef struct snake {
 } SNAKE;
 
 void print_snake(SNAKE *snake);
+
 void generate_food(SNAKE *snake);
 
 void add_body(SNAKE *snake) {
     snake->body_count++;
-    snake->body = (BODY *) calloc(snake->body_count, sizeof(BODY));
-    for (int body_num = 0; body_num < MAP_X * MAP_Y; ++body_num) {
-
-    }
+    BODY *new_snake = (BODY *) calloc(snake->body_count, sizeof(BODY));
+    memcpy(new_snake, snake->body, sizeof(BODY) * ((snake->body_count) - 1));
+    free(snake->body);
+    snake->body = new_snake;
 }
 
 void cursor_print(int x, int y, int symbol) {
@@ -76,6 +77,8 @@ int collision_judgment(SNAKE *snake) {
     // 头部碰到食物
     if (snake->body[0].body_x == snake->food_x && snake->body[0].body_y == snake->food_y) {
         generate_food(snake); // 重新生成食物
+        add_body(snake); // 加长身体
+        cal_score(snake); // 累加分数
     }
     return 0;
 }
@@ -220,7 +223,7 @@ void init_snake(SNAKE **ppsnake) {
     /*初始化蛇*/
     SNAKE *snake = (SNAKE *) calloc(1, sizeof(SNAKE));
     // 初始化头部和两节身体
-    snake->body_count = 10;
+    snake->body_count = 3;
     snake->body = (BODY *) calloc(snake->body_count, sizeof(BODY));
     for (int i = 0; i < 3; ++i) {
         snake->body[i].body_x = ((MAP_X - 2) / 2) - i;
