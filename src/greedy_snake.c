@@ -169,7 +169,6 @@ void snake_moving(SNAKE *snake) {
     while (TRUE) {
         // 读取按键
         read_keyboard(snake);
-
         cls_tail(snake);
         // 更新身体坐标
         for (int i = (snake->body_count - 1); i > 0; i--) {
@@ -185,6 +184,7 @@ void snake_moving(SNAKE *snake) {
         if (collision_judgment(snake)) {
             break;
         }
+
         print_snake(snake);
 
         usleep(1000000 / SPEED); // 休眠250毫秒, 单位微秒
@@ -209,12 +209,14 @@ void print_snake(SNAKE *snake) {
 
 void generate_food(SNAKE *snake) {
     /*随机生成食物*/
-    do {
-        srand(time(NULL) + 1);
-        snake->food_x = rand() % MAP_X + 1;
-        snake->food_y = (rand() % MAP_Y) + 1;
-    } while (!(snake->food_x >= 2 && snake->food_x <= MAP_X - 3 && snake->food_y >= 2 &&
-               snake->food_y <= MAP_Y - 3)); // 判断生成在地图内
+    srand(time(NULL) + 1);
+    snake->food_x = rand() % MAP_X + 1;
+    snake->food_y = (rand() % MAP_Y) + 1;
+    while (!(snake->food_x >= 2 && snake->food_x <= MAP_X - 3 && snake->food_y >= 2 &&
+             snake->food_y <= MAP_Y - 3)) { // 不生成在地图内
+        snake->food_x = snake->food_x % MAP_X + 1;
+        snake->food_y = (snake->food_y % MAP_Y) + 1;
+    }
     // 打印$
     cursor_print(snake->food_x, snake->food_y, '$');
 }
@@ -232,6 +234,11 @@ void init_snake(SNAKE **ppsnake) {
     // 初始化方向
     snake->dx = 1;
     snake->dy = 0;
+    // 隐藏光标
+    CONSOLE_CURSOR_INFO cci;
+    cci.dwSize = sizeof(cci);
+    cci.bVisible = FALSE;
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cci);
     // 生成食物并打印
     generate_food(snake);
     // 打印蛇
@@ -239,6 +246,7 @@ void init_snake(SNAKE **ppsnake) {
     // 初始化分数
     snake->score = 0;
     *ppsnake = snake;
+
 }
 
 void generate_map() {
