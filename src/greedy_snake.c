@@ -53,18 +53,20 @@ int cal_score(SNAKE *snake) {
 
 int collision_judgment(SNAKE *snake) {
     /*墙碰撞判断*/
-    if (snake->body->body_x == 0 || snake->body->body_x == MAP_X - 1 || snake->body->body_y == 0 ||
-        snake->body->body_y == MAP_Y - 1) {
+    if (snake->body[0].body_x == 0 || snake->body[0].body_x == MAP_X - 1 || snake->body[0].body_y == 0 ||
+        snake->body[0].body_y == MAP_Y - 1) {
         return 1;
     }
     // 碰撞自身判断
     int heard_x = snake->body->body_x;
     int heard_y = snake->body->body_y;
     for (int i = 1; i < snake->body_count; ++i) {
-        if ((heard_x == ((snake->body) + i)->body_x) && (heard_y == ((snake->body) + i)->body_y)) {
+        if (snake->body[0].body_x == snake->body[i].body_x && snake->body[0].body_y == snake->body[i].body_y) {
             return 1;
         }
     }
+    // 头部碰到食物
+
     return 0;
 }
 
@@ -143,15 +145,9 @@ void read_keyboard(SNAKE *snake) {
 void cls_tail(SNAKE *snake) {
     /*移动前清除尾部*/
     // 取尾部坐标
-    int tail_x = 0;
-    int tail_y = 0;
-
-    tail_x = ((snake->body) + ((snake->body_count) - 1))->body_x;
-    tail_y = ((snake->body) + ((snake->body_count) - 1))->body_y;
-
     COORD coord;
-    coord.X = tail_x;
-    coord.Y = tail_y;
+    coord.X = snake->body[snake->body_count-1].body_x;
+    coord.Y = snake->body[snake->body_count-1].body_y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     printf("%c", ' ');
     fflush(stdout);
@@ -169,13 +165,13 @@ void snake_moving(SNAKE *snake) {
         // 更新身体坐标
         for (int i = (snake->body_count - 1); i > 0; i--) {
             // 头自主更新, 3=2 2=1 1=0
-            ((snake->body) + i)->body_x = ((snake->body) + (i - 1))->body_x;
-            ((snake->body) + i)->body_y = ((snake->body) + (i - 1))->body_y;
+            snake->body[i].body_x = snake->body[i-1].body_x;
+            snake->body[i].body_y = snake->body[i-1].body_y;
 
         }
         // 更新头部坐标
-        (snake->body)->body_x += snake->dx;
-        (snake->body)->body_y += snake->dy;
+        snake->body[0].body_x += snake->dx;
+        snake->body[0].body_y += snake->dy;
 
         if (collision_judgment(snake)) {
             break;
@@ -192,10 +188,9 @@ void print_snake(SNAKE *snake) {
     /*打印蛇和食物*/
     // <windows.h>设置光标位置
     COORD coord;
-//    system("cls");
     for (int i = 0; i < snake->body_count; ++i) {
-        coord.X = ((snake->body) + i)->body_x;
-        coord.Y = ((snake->body) + i)->body_y;
+        coord.X = snake->body[i].body_x;
+        coord.Y = snake->body[i].body_y;
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 
         if (i == 0) {
@@ -233,8 +228,8 @@ void init_snake(SNAKE **ppsnake) {
     snake->body_count = 10;
     snake->body = (BODY *) calloc(snake->body_count, sizeof(BODY));
     for (int i = 0; i < 3; ++i) {
-        ((snake->body) + i)->body_x = ((MAP_X - 2) / 2) - i;
-        ((snake->body) + i)->body_y = (MAP_Y - 2) / 2;
+        snake->body[i].body_x = ((MAP_X - 2) / 2) - i;
+        snake->body[i].body_y = (MAP_Y - 2) / 2;
     }
     // 初始化方向
     snake->dx = 1;
