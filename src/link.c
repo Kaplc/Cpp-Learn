@@ -44,11 +44,18 @@ void print_chars(void *data) {
     printf("字符串：%s\n", chardata);
 }
 
-void clear_list() {
-
+void clear_list(MAINTENANCE *list) {
+    LINKNODE *current = list->header.node.next;
+    for (int i = 0; i < list->size; ++i) {
+        DATANODE *temp = (DATANODE *)current;
+        current = current->next;
+        if (temp == NULL)break;
+        free(temp);
+    }
+    list->size = 0;
 }
 
-void delete_list() {
+void delete_list(MAINTENANCE *list) {
 
 }
 
@@ -130,6 +137,9 @@ void run_link() {
     // 查询链表
     print_link(list, print_person);
     delete_datanode(list, 3);
+    printf("\n");
+    print_link(list, print_person);
+    clear_list(list);
     printf("\n");
     print_link(list, print_person);
 }
