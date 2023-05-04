@@ -45,22 +45,31 @@ void print_chars(void *data) {
 }
 
 void clear_list(MAINTENANCE *list) {
+
     LINKNODE *current = list->header.node.next;
+    list->header.node.next = NULL;
     for (int i = 0; i < list->size; ++i) {
-        DATANODE *temp = (DATANODE *)current;
+        DATANODE *temp = (DATANODE *) current;
         current = current->next;
-        if (temp == NULL)break;
         free(temp);
     }
     list->size = 0;
+    printf("清空完成");
+
 }
 
-void delete_list(MAINTENANCE *list) {
+void delete_list(MAINTENANCE **list) {
+    if (list != NULL) {
+        free(*list);
 
+    };
+    printf("链表删除成功");
+    *list = NULL;
 }
 
 void delete_datanode(MAINTENANCE *list, int pos) {
     if (list == NULL) {
+        printf("链表为空");
         return;
     }
     if (pos > list->size || pos < 1) {
@@ -81,6 +90,7 @@ void delete_datanode(MAINTENANCE *list, int pos) {
 
 void create_datanode(MAINTENANCE *list, void *data, int pos) {
     if (list == NULL) {
+        printf("链表为空");
         return;
     }
     DATANODE *new_datanode = malloc(sizeof(DATANODE)); // 创建新数据节点
@@ -103,6 +113,7 @@ void create_datanode(MAINTENANCE *list, void *data, int pos) {
 
 void print_link(MAINTENANCE *list, void (*print_func)(DATANODE *)) {
     if (list == NULL) {
+        printf("链表为空");
         return;
     }
     LINKNODE *current = (LINKNODE *) &(list->header);
@@ -140,6 +151,9 @@ void run_link() {
     printf("\n");
     print_link(list, print_person);
     clear_list(list);
+    printf("\n");
+    print_link(list, print_person);
+    delete_list(&list);
     printf("\n");
     print_link(list, print_person);
 }
