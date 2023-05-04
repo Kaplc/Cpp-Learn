@@ -44,6 +44,16 @@ void print_chars(void *data) {
     printf("字符串：%s\n", chardata);
 }
 
+void delete_datanode(MAINTENANCE *list, int pos) {
+    if (list == NULL) {
+        return;
+    }
+    if (pos > list->size || pos < 1) {
+        printf("删除位置非法");
+    }
+
+}
+
 void create_datanode(MAINTENANCE *list, void *data, int pos) {
     if (list == NULL) {
         return;
@@ -52,28 +62,17 @@ void create_datanode(MAINTENANCE *list, void *data, int pos) {
     new_datanode->data = data;
     new_datanode->node.next = NULL;
 
-    if (pos > list->size) {
-        // 插入位置大于链表长度进行尾插
-        LINKNODE *current = &(list->header.node);
-        for (int i = 0; i < list->size; ++i) { // 移动链表指针到末尾
-            current = current->next;
-        }
-        // 连接链表
-        current->next = (LINKNODE*)new_datanode;// 指向数据节点的前面属于LINKNODE的内存空间
+    LINKNODE *current = &(list->header.node);
+    if (pos < 1) pos = 1;
+    if (pos > list->size)pos = list->size + 1;
 
-    } else {
-        if (pos < 1)pos = 1; // 小于1修改为头插
-
-        LINKNODE *front = list->header.node.next; // 前驱指针
-        LINKNODE *after = &(list->header.node); // 后驱指针
-        for (int i = 1; i < pos; ++i) {
-            after = front; // 移动后驱
-            front = front->next; // 移动前驱
-        }
-        // 连接链表
-        after->next = (LINKNODE*)new_datanode;
-        new_datanode->node.next = front;
+    for (int i = 1; i < pos; ++i) { // 移动链表指针到目标位置
+        current = current->next;
     }
+    // 连接链表
+    new_datanode->node.next = current->next;
+    current->next = (LINKNODE *) new_datanode;// 指向数据节点的前面属于LINKNODE的内存空间
+
     list->size++;
 }
 
@@ -101,13 +100,14 @@ void run_link() {
     PERSON data4 = {"xiaob", 4};
     PERSON data5 = {"xiaoc", 5};
 //    int pos = 3;
-//    int data = 100;
+    int data = 100;
     // 插入链表
     create_datanode(list, &data1, 1);
     create_datanode(list, &data2, 2);
     create_datanode(list, &data3, -9);
     create_datanode(list, &data4, 100);
     create_datanode(list, &data5, 2);
+//    35124
     // 查询链表
     print_link(list, print_person);
 }
