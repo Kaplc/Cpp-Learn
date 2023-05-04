@@ -23,8 +23,8 @@ typedef struct person {
     int id;
 } PERSON;
 
-void print_person(void *data) {
-    PERSON *person_data = data;
+void print_person(DATANODE *data) {
+    PERSON *person_data = data->data;
     printf("姓名：%s 学号：%d\n", person_data->name, person_data->id);
 
 }
@@ -44,14 +44,32 @@ void print_chars(void *data) {
     printf("字符串：%s\n", chardata);
 }
 
+void clear_list() {
+
+}
+
+void delete_list() {
+
+}
+
 void delete_datanode(MAINTENANCE *list, int pos) {
     if (list == NULL) {
         return;
     }
     if (pos > list->size || pos < 1) {
         printf("删除位置非法");
+        return;
     }
+    LINKNODE *front = list->header.node.next; // 前驱指针
+    LINKNODE *after = (LINKNODE *) &(list->header); // 后驱指针
 
+    for (int i = 1; i < pos; ++i) {
+        after = front;
+        front = front->next;
+    }
+    after->next = front->next; // 修改后驱指针指向
+    free((DATANODE *) front);
+    list->size--;
 }
 
 void create_datanode(MAINTENANCE *list, void *data, int pos) {
@@ -62,7 +80,7 @@ void create_datanode(MAINTENANCE *list, void *data, int pos) {
     new_datanode->data = data;
     new_datanode->node.next = NULL;
 
-    LINKNODE *current = &(list->header.node);
+    LINKNODE *current = (LINKNODE *) &(list->header);
     if (pos < 1) pos = 1;
     if (pos > list->size)pos = list->size + 1;
 
@@ -76,14 +94,15 @@ void create_datanode(MAINTENANCE *list, void *data, int pos) {
     list->size++;
 }
 
-void print_link(MAINTENANCE *list, void (*print_func)(void *)) {
+void print_link(MAINTENANCE *list, void (*print_func)(DATANODE *)) {
     if (list == NULL) {
         return;
     }
-    DATANODE *current = &(list->header);
-    for (int i = 0; i < list->size; ++i) {
-        current = (DATANODE *) current->node.next; // 通过node找到节点首地址，强转成DATANODE *改变指针步长读取所有数据
-        print_func(current->data); // 回调函数处理不同类型数据
+    LINKNODE *current = (LINKNODE *) &(list->header);
+    for (int i = 1; i <= list->size; ++i) {
+        current = current->next; // 移动指针
+        // 通过node找到节点首地址，强转成DATANODE *改变指针步长读取所有数据
+        print_func((DATANODE *) current); // 回调函数处理不同类型数据
     }
 }
 
@@ -109,5 +128,8 @@ void run_link() {
     create_datanode(list, &data5, 2);
 //    35124
     // 查询链表
+    print_link(list, print_person);
+    delete_datanode(list, 3);
+    printf("\n");
     print_link(list, print_person);
 }
