@@ -8,6 +8,7 @@
 #include "header/translation.h"
 #include "header/greedy_snake.h"
 #include "header/link.h"
+#include "header/stack.h"
 
 //void menu() {
 //    printf("1.四则运算生成器\n");
@@ -42,11 +43,11 @@ int main() {
 //    run_calculate(); // 四则运算生成器
 //    run_translations(); // 快译通翻译
 //    run_greedy_snake(); // 贪吃蛇
-    run_link(); // 链表
-
-    printf("\n");
+//    run_link(); // 链表
+    run_stack();
+//    printf("\n");
     //pause();
-    system("pause");
+//    system("pause");
     return 0;
 }
 
