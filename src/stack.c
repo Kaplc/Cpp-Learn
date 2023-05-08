@@ -6,15 +6,7 @@
 #include <stdio.h>
 #include "../header/stack.h"
 
-typedef struct node {
-    struct node *next;
-    void *data;
-} NODE;
 
-typedef struct stack {
-    NODE header;
-    int size;
-} STACK;
 
 void init_stack(STACK **ppstack) {
     // 初始化栈

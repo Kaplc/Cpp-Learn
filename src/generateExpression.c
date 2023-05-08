@@ -75,7 +75,7 @@ void read_to_calculate() {
     printf("计算完成\n");
 }
 
-void run_calculate() {
+void run_generateExpression() {
     int count = 0;
     printf("请输入要生成的表达式数目:");
     fflush(stdout);

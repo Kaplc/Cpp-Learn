@@ -3,12 +3,14 @@
 #include <string.h>
 #include <locale.h>
 
-#include "header/calculate.h"
+#include "header/generateExpression.h"
 #include "header/utility.h"
 #include "header/translation.h"
 #include "header/greedy_snake.h"
 #include "header/link.h"
 #include "header/stack.h"
+#include "header/calculator.h"
+#include "header/dynamicArray.h"
 
 //void menu() {
 //    printf("1.四则运算生成器\n");
@@ -44,7 +46,13 @@ int main() {
 //    run_translations(); // 快译通翻译
 //    run_greedy_snake(); // 贪吃蛇
 //    run_link(); // 链表
-    run_stack();
+//    run_stack();
+//    run_calculator();
+    run_dynamicArray();
+
+
+
+
 //    printf("\n");
     //pause();
 //    system("pause");

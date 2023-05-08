@@ -7,4 +7,4 @@
 
 #endif //CPP_LEARN_CALCULATE_H
 #pragma once
-void run_calculate();
+void run_generateExpression();
