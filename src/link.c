@@ -101,15 +101,16 @@ void pop_link_content(MAINTENANCE *list, void *content) {
         if (((DATANODE *) front)->data == content) {
             printf("删除内容----：");
             print_person((DATANODE *) front);
+            after->next = front->next; // 修改后驱指针指向
+            free((DATANODE *) front);
+            list->size--;
             break;
+        }else if (i == list->size-1){
+            printf("要删除的内容不存在");
         }
         after = front;
         front = front->next;
-
     }
-    after->next = front->next; // 修改后驱指针指向
-    free((DATANODE *) front);
-    list->size--;
 }
 
 void insert_link(MAINTENANCE *list, void *data, int pos) {
@@ -171,7 +172,7 @@ void run_link() {
 //    35124
     // 查询链表
     print_link(list, print_person);
-    pop_link_content(list, &data1);
+    pop_link_content(list, &data);
     printf("\n");
     print_link(list, print_person);
     clear_list(list);
