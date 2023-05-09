@@ -68,14 +68,24 @@ void pop_dynamicArray_pos(DARRAY *darray, int pos) {
 
 void pop_dynamicArray_content(DARRAY *darray, void *content) {
     if (darray == NULL)return;
-
+    int exist = 0; // 判断是否存在该值标识
+    for (int i = 0; i < darray->size; ++i) {
+        if (darray->dArray[i] != content && exist == 0) {
+            continue; // 值不同继续循环
+        }
+        darray->dArray[i] = darray->dArray[i + 1]; // 后往前覆盖
+        exist = 1;
+    }
+    if (exist == 1) {
+        darray->size--;
+    }
 
 }
 
 void read_dynamicArray(DARRAY *darray) {
     for (int i = 0; i < darray->size; ++i) {
 
-        printf("%d", *(int*)darray->dArray[i]);
+        printf("%d", *(int *) darray->dArray[i]);
     }
 }
 
@@ -100,6 +110,6 @@ void run_dynamicArray() {
     //521364
     read_dynamicArray(darray);
     printf("\n---------------\n");
-    pop_dynamicArray_pos(darray, 3);
+    pop_dynamicArray_content(darray, &a2);
     read_dynamicArray(darray);
 }
