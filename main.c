@@ -45,10 +45,10 @@ int main() {
 //    run_calculate(); // 四则运算生成器
 //    run_translations(); // 快译通翻译
 //    run_greedy_snake(); // 贪吃蛇
-    run_link(); // 链表
+//    run_link(); // 链表
 //    run_stack();
 //    run_calculator();
-//    run_dynamicArray();
+    run_dynamicArray();
 
 
 

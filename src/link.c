@@ -87,6 +87,7 @@ void pop_link_pos(MAINTENANCE *list, int pos) {
     free((DATANODE *) front);
     list->size--;
 }
+
 void pop_link_content(MAINTENANCE *list, void *content) {
     if (list == NULL) {
         printf("链表为空");
@@ -97,9 +98,9 @@ void pop_link_content(MAINTENANCE *list, void *content) {
     LINKNODE *after = (LINKNODE *) &(list->header); // 后驱指针
 
     for (int i = 1; i < list->size; ++i) {
-        if (((DATANODE *)front)->data == content){
+        if (((DATANODE *) front)->data == content) {
             printf("删除内容----：");
-            print_person((DATANODE *)front);
+            print_person((DATANODE *) front);
             break;
         }
         after = front;
@@ -110,6 +111,7 @@ void pop_link_content(MAINTENANCE *list, void *content) {
     free((DATANODE *) front);
     list->size--;
 }
+
 void insert_link(MAINTENANCE *list, void *data, int pos) {
     if (list == NULL) {
         printf("链表为空");

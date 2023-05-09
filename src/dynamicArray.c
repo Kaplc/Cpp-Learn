@@ -48,15 +48,35 @@ void insert_dynamicArray(DARRAY *darray, void *data, int pos) {
         for (int i = 0; pos <= darray->size - i; i++) {
             darray->dArray[darray->size - i] = darray->dArray[darray->size - i - 1];
         }
-        darray->dArray[pos-1] = data;
+        darray->dArray[pos - 1] = data;
     }
     darray->size++;
 
 }
 
-void delete_dynamicArray_pos(DARRAY *darray, int pos) {
+void pop_dynamicArray_pos(DARRAY *darray, int pos) {
+    if (darray == NULL)return;
+    if (pos <= 0 && pos > darray->size) {
+        printf("删除位置非法");
+    }
+    pos--; // pos下标1为数组的0
+    for (int i = 0; i < (darray->size - pos); ++i) {
+        darray->dArray[pos + i] = darray->dArray[pos + 1 + i];
+    }
+    darray->size--;
+}
+
+void pop_dynamicArray_content(DARRAY *darray, void *content) {
     if (darray == NULL)return;
 
+
+}
+
+void read_dynamicArray(DARRAY *darray) {
+    for (int i = 0; i < darray->size; ++i) {
+
+        printf("%d", *(int*)darray->dArray[i]);
+    }
 }
 
 void destroy_dynamicArray(DARRAY *darray) {
@@ -78,4 +98,8 @@ void run_dynamicArray() {
     insert_dynamicArray(darray, &a5, -2);
     insert_dynamicArray(darray, &a6, 5);
     //521364
+    read_dynamicArray(darray);
+    printf("\n---------------\n");
+    pop_dynamicArray_pos(darray, 3);
+    read_dynamicArray(darray);
 }
