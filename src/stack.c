@@ -7,14 +7,14 @@
 #include "../header/stack.h"
 
 
-
-void init_stack(STACK **ppstack) {
+STACK *init_stack() {
     // 初始化栈
+
     STACK *stack = malloc(sizeof(struct stack));
     stack->size = 0;
     stack->header.next = NULL;
 
-    *ppstack = stack;
+    return stack;
 }
 
 void push_stack(STACK *stack, void *data) {
@@ -32,19 +32,23 @@ void push_stack(STACK *stack, void *data) {
     stack->size++;
 }
 
-void pop_stack(STACK *stack) {
-    if (stack == NULL)return;
+void* pop_stack(STACK *stack) {
+    if (stack == NULL || stack->size <= 0)return NULL;
 
     NODE *current = &(stack->header);
     // 从头节点指向第一个节点
     current = current->next;
-    printf("%d\n", *((int *) (current->data)));
+//    printf("%d\n", *((int *) (current->data)));
     // 头结点指向第二个节点
     stack->header.next = current->next;
     stack->size--;
-    // 释放第一个节点
-    free(current);
 
+    return current->data;
+}
+
+void* read_stack_top(STACK *stack) {
+    if (stack == NULL || stack->size <= 0)return NULL;
+    return stack->header.next->data;
 }
 
 void read_stack(STACK *stack) {
@@ -64,7 +68,7 @@ void destroy_stack(STACK **ppstack) {
 
 void run_stack() {
     STACK *stack = NULL;
-    init_stack(&stack);
+    stack = init_stack();
 
     int data = 1, d2 = 2, d3 = 3;
     push_stack(stack, &data);

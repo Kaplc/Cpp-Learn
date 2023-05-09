@@ -47,8 +47,8 @@ int main() {
 //    run_greedy_snake(); // 贪吃蛇
 //    run_link(); // 链表
 //    run_stack();
-//    run_calculator();
-    run_dynamicArray();
+    run_calculator();
+//    run_dynamicArray();
 
 
 

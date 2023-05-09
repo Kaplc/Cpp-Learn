@@ -15,9 +15,10 @@ typedef struct stack {
 } STACK;
 
 void run_stack();
-void init_stack(STACK **ppstack);
+STACK *init_stack();
 void destroy_stack(STACK **ppstack);
 void read_stack(STACK *stack);
-void pop_stack(STACK *stack);
+void* read_stack_top(STACK *stack);
+void* pop_stack(STACK *stack);
 void push_stack(STACK *stack, void *data);
 #endif //LINUX_CPPLEARN_STACK_H
