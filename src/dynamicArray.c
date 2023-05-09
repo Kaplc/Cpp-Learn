@@ -89,12 +89,13 @@ void read_dynamicArray(DARRAY *darray) {
     }
 }
 
-void destroy_dynamicArray(DARRAY *darray) {
-    if (darray == NULL)return;
+void destroy_dynamicArray(DARRAY **ppdarray) {
+    if (*ppdarray == NULL)return;
 
-    free(darray->dArray);
-    free(darray);
-    printf("动态数组已销毁");
+    free((*ppdarray)->dArray);
+    free(*ppdarray);
+    printf("\n动态数组已销毁");
+    *ppdarray = NULL;
 }
 
 void run_dynamicArray() {
@@ -112,4 +113,5 @@ void run_dynamicArray() {
     printf("\n---------------\n");
     pop_dynamicArray_content(darray, &a2);
     read_dynamicArray(darray);
+    destroy_dynamicArray(&darray);
 }
