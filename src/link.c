@@ -67,7 +67,7 @@ void delete_list(MAINTENANCE **list) {
     *list = NULL;
 }
 
-void delete_datanode(MAINTENANCE *list, int pos) {
+void pop_link_pos(MAINTENANCE *list, int pos) {
     if (list == NULL) {
         printf("链表为空");
         return;
@@ -87,8 +87,30 @@ void delete_datanode(MAINTENANCE *list, int pos) {
     free((DATANODE *) front);
     list->size--;
 }
+void pop_link_content(MAINTENANCE *list, void *content) {
+    if (list == NULL) {
+        printf("链表为空");
+        return;
+    }
 
-void create_datanode(MAINTENANCE *list, void *data, int pos) {
+    LINKNODE *front = list->header.node.next; // 前驱指针
+    LINKNODE *after = (LINKNODE *) &(list->header); // 后驱指针
+
+    for (int i = 1; i < list->size; ++i) {
+        if (((DATANODE *)front)->data == content){
+            printf("删除内容----：");
+            print_person((DATANODE *)front);
+            break;
+        }
+        after = front;
+        front = front->next;
+
+    }
+    after->next = front->next; // 修改后驱指针指向
+    free((DATANODE *) front);
+    list->size--;
+}
+void insert_link(MAINTENANCE *list, void *data, int pos) {
     if (list == NULL) {
         printf("链表为空");
         return;
@@ -137,17 +159,17 @@ void run_link() {
     PERSON data4 = {"xiaob", 4};
     PERSON data5 = {"xiaoc", 5};
 //    int pos = 3;
-    int data = 100;
+    int data = 3;
     // 插入链表
-    create_datanode(list, &data1, 1);
-    create_datanode(list, &data2, 2);
-    create_datanode(list, &data3, -9);
-    create_datanode(list, &data4, 100);
-    create_datanode(list, &data5, 2);
+    insert_link(list, &data1, 1);
+    insert_link(list, &data2, 2);
+    insert_link(list, &data3, -9);
+    insert_link(list, &data4, 100);
+    insert_link(list, &data5, 2);
 //    35124
     // 查询链表
     print_link(list, print_person);
-    delete_datanode(list, 3);
+    pop_link_content(list, &data1);
     printf("\n");
     print_link(list, print_person);
     clear_list(list);

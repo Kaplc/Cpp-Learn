@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "../header/dynamicArray.h"
 
 #define CAPACITY 2
@@ -53,12 +54,17 @@ void insert_dynamicArray(DARRAY *darray, void *data, int pos) {
 
 }
 
-void delete__dynamicArray(DARRAY *darray) {
+void delete_dynamicArray_pos(DARRAY *darray, int pos) {
     if (darray == NULL)return;
+
 }
 
 void destroy_dynamicArray(DARRAY *darray) {
     if (darray == NULL)return;
+
+    free(darray->dArray);
+    free(darray);
+    printf("动态数组已销毁");
 }
 
 void run_dynamicArray() {
