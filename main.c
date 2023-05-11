@@ -8,7 +8,7 @@
 #include "header/translation.h"
 #include "header/greedy_snake.h"
 #include "header/link.h"
-#include "header/stack.h"
+#include "header/cal_stack.h"
 #include "header/calculator.h"
 #include "header/dynamicArray.h"
 

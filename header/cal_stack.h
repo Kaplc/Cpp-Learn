@@ -7,7 +7,7 @@
 typedef struct node {
     struct node *next;
     void *data;
-    char ch;
+    char type;
 } NODE;
 
 typedef struct stack {
@@ -16,10 +16,18 @@ typedef struct stack {
 } STACK;
 
 void run_stack();
-STACK *init_stack();
-void destroy_stack(STACK **ppstack);
-void read_stack(STACK *stack);
-void* read_stack_top(STACK *stack);
-void* pop_stack(STACK *stack);
-void push_stack(STACK *stack, void *data);
+
+STACK *init_calstack();
+
+NODE *generate_node(void *data, char type);
+
+void push_calstack(STACK *stack, NODE* node);
+
+NODE * pop_calstack(STACK *stack);
+
+NODE * read_calstack_top(STACK *stack);
+
+void read_calstack(STACK *stack);
+
+void destroy_calstack(STACK **ppstack);
 #endif //LINUX_CPPLEARN_STACK_H
