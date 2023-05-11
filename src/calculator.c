@@ -36,16 +36,16 @@ double start_cal(double right, double left, char sign) {
     double res = 0;
     switch (sign) {
         case '+':
-            res = right + left;
+            res = left + right;
             break;
         case '-':
-            res = right - left;
+            res = left - right;
             break;
         case '*':
-            res = right * left;
+            res = left * right;
             break;
         case '/':
-            res = right / left;
+            res = left / right;
             break;
     }
     return res;
