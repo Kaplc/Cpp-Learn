@@ -32,7 +32,7 @@ int judge_priority(char sign) {
     return resPriority;
 }
 
-double* start_cal(double right, double left, char sign) {
+double *start_cal(double right, double left, char sign) {
     double *res = malloc(sizeof(double));
     switch (sign) {
         case '+':
@@ -45,7 +45,7 @@ double* start_cal(double right, double left, char sign) {
             *res = left * right;
             break;
         case '/':
-            if (right == 0){
+            if (right == 0) {
                 return NULL;
                 break;
             }
@@ -85,8 +85,9 @@ LINKLIST *convert_suffix(char expression[]) {
         } else if (*currChar == '+' || *currChar == '-' || *currChar == '*' || *currChar == '/' || *currChar == '(' ||
                    *currChar == ')') {
             // 不能连续输入两个及以上符号
-            if (*(currChar +1)  == '+' || *(currChar +1) == '-' || *(currChar +1) == '*' || *(currChar +1) == '/' || *(currChar +1) == '(' ||
-                *(currChar +1) == ')'){
+            if (*(currChar + 1) == '+' || *(currChar + 1) == '-' || *(currChar + 1) == '*' || *(currChar + 1) == '/' ||
+                *(currChar + 1) == '(' ||
+                *(currChar + 1) == ')') {
                 return NULL;
             }
             // 符号生成节点‘s’标识为符号
@@ -145,7 +146,7 @@ LINKLIST *convert_suffix(char expression[]) {
     return linklist;
 }
 
-double* use_suffix_cal(LINKLIST *linklist) {
+double *use_suffix_cal(LINKLIST *linklist) {
     // 初始化计算栈
     STACK *cal_stack = init_calstack();
     NODE *current_node = &(linklist->header);
@@ -164,9 +165,9 @@ double* use_suffix_cal(LINKLIST *linklist) {
             // 左操作数出栈
             double left_num = *(double *) pop_calstack(cal_stack)->data;
             // 进行计算后结果入栈
-            double *res = malloc(sizeof(double ));
-            res = start_cal(right_num, left_num, *(char *)current_node->data);
-            if (res == NULL){
+            double *res = malloc(sizeof(double));
+            res = start_cal(right_num, left_num, *(char *) current_node->data);
+            if (res == NULL) {
 
                 return NULL;
             }
@@ -177,34 +178,33 @@ double* use_suffix_cal(LINKLIST *linklist) {
         }
     }
     double *finally_res = malloc(sizeof(double));
-    finally_res = (double *)cal_stack->header.next->data;
+    finally_res = (double *) cal_stack->header.next->data;
     return finally_res;
 }
 
 void run_calculator() {
     printf("请输入表达式(例：3.5*2+(7-2)-1)：\n");
-    while (1){
+    while (1) {
         char expression[1024] = {0};
         fgets(expression, 1024, stdin);
 
         LINKLIST *suffix_linklist = convert_suffix(expression);
-        if (suffix_linklist == NULL){
+        if (suffix_linklist == NULL) {
             printf("表达式错误！\n");
             continue;
         }
-        double* res = use_suffix_cal(suffix_linklist);
-        if (res == NULL){
+        double *res = use_suffix_cal(suffix_linklist);
+        if (res == NULL) {
             printf("除数不能为0!\n");
             continue;
         }
-        int int_part = (int)*res;
+        int int_part = (int) *res;
         double decimal_part = int_part - *res;
-        if (decimal_part == 0.0000){
+        if (decimal_part == 0.0000) {
             printf("%d", int_part);
-        } else{
-            printf("%.3lf", res);
+        } else {
+            printf("%.3lf", *res);
         }
         printf("\n");
     }
-
 }
