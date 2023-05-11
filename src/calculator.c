@@ -167,6 +167,7 @@ double use_suffix_cal(LINKLIST *linklist) {
 }
 
 void run_calculator() {
+    printf("请输入表达式(例：3.5*2+(7-2)-1)：\n");
     while (1){
         char expression[1024] = {0};
         fgets(expression, 1024, stdin);
