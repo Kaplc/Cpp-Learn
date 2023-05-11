@@ -25,5 +25,6 @@ void add_node(LINKLIST *linklist, NODE *node) {// 尾插
         current = current->next;
     }
     current->next = node;
+    linklist->size++;
 }
 

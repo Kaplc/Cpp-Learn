@@ -47,6 +47,7 @@ NODE * pop_calstack(STACK *stack) {
 //    printf("%d\n", *((int *) (current->data)));
     // 头结点指向第二个节点
     stack->header.next = current->next;
+    current->next = NULL; // 出栈前置空next指针
     stack->size--;
 
     return current;
