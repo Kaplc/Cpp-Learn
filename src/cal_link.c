@@ -8,10 +8,6 @@
 #include "../header/cal_stack.h"
 
 
-typedef struct linklist {
-    NODE header;
-    int size;
-} LINKLIST;
 
 LINKLIST *init_calLink() {
     LINKLIST *linklist = malloc(sizeof(LINKLIST));
