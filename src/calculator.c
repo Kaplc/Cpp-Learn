@@ -32,20 +32,25 @@ int judge_priority(char sign) {
     return resPriority;
 }
 
-double start_cal(double right, double left, char sign) {
-    double res = 0;
+double* start_cal(double right, double left, char sign) {
+    double *res = malloc(sizeof(double));
     switch (sign) {
         case '+':
-            res = left + right;
+            *res = left + right;
             break;
         case '-':
-            res = left - right;
+            *res = left - right;
             break;
         case '*':
-            res = left * right;
+            *res = left * right;
             break;
         case '/':
-            res = left / right;
+            if (right == 0){
+                return NULL;
+                break;
+            }
+            *res = left / right;
+
             break;
     }
     return res;
@@ -119,7 +124,7 @@ LINKLIST *convert_suffix(char expression[]) {
                 push_calstack(signStack, curr_node);
             }
         } else {
-            printf("表达式错误！");
+
             return NULL;
         }
     }
@@ -135,7 +140,7 @@ LINKLIST *convert_suffix(char expression[]) {
     return linklist;
 }
 
-double use_suffix_cal(LINKLIST *linklist) {
+double* use_suffix_cal(LINKLIST *linklist) {
     // 初始化计算栈
     STACK *cal_stack = init_calstack();
     NODE *current_node = &(linklist->header);
@@ -155,15 +160,20 @@ double use_suffix_cal(LINKLIST *linklist) {
             double left_num = *(double *) pop_calstack(cal_stack)->data;
             // 进行计算后结果入栈
             double *res = malloc(sizeof(double ));
-            *res = start_cal(right_num, left_num, *(char *)current_node->data);
+            res = start_cal(right_num, left_num, *(char *)current_node->data);
+            if (res == NULL){
+
+                return NULL;
+            }
             res_node->next = NULL;
             res_node->data = res;
             res_node->type = 'n';
             push_calstack(cal_stack, res_node);
         }
     }
-    double res = *(double *)cal_stack->header.next->data;
-    return res;
+    double *finally_res = malloc(sizeof(double));
+    finally_res = (double *)cal_stack->header.next->data;
+    return finally_res;
 }
 
 void run_calculator() {
@@ -173,10 +183,17 @@ void run_calculator() {
         fgets(expression, 1024, stdin);
 
         LINKLIST *suffix_linklist = convert_suffix(expression);
-        if (suffix_linklist == NULL)return;
-        double res = use_suffix_cal(suffix_linklist);
-        int int_part = (int)res;
-        double decimal_part = int_part - res;
+        if (suffix_linklist == NULL){
+            printf("表达式错误！");
+            return;
+        }
+        double* res = use_suffix_cal(suffix_linklist);
+        if (res == NULL){
+            printf("除数不能为0!\n");
+            continue;
+        }
+        int int_part = (int)*res;
+        double decimal_part = int_part - *res;
         if (decimal_part == 0.0000){
             printf("%d", int_part);
         } else{
