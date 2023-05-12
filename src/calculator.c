@@ -84,12 +84,7 @@ LINKLIST *convert_suffix(char expression[]) {
 
         } else if (*currChar == '+' || *currChar == '-' || *currChar == '*' || *currChar == '/' || *currChar == '(' ||
                    *currChar == ')') {
-            // 不能连续输入两个及以上符号
-            if (*(currChar + 1) == '+' || *(currChar + 1) == '-' || *(currChar + 1) == '*' || *(currChar + 1) == '/' ||
-                *(currChar + 1) == '(' ||
-                *(currChar + 1) == ')') {
-                return NULL;
-            }
+
             // 符号生成节点‘s’标识为符号
             NODE *curr_node = generate_node(currChar, 's');
 
