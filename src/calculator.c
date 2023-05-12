@@ -9,6 +9,40 @@
 #include <stdlib.h>
 #include <string.h>
 
+int judge_expression(char expression[]) {
+    char *curr_char = expression;
+    char *first_char = expression;
+    int num_count = 0;
+    int sign_count = 0;
+    int rightParenthesis_count = 0;
+    int leftParenthesis_count = 0;
+    int leng = strlen(expression);
+    for (int i = 0; i < strlen(expression)-1; ++i) {
+        curr_char = first_char + i;
+        if (*curr_char >= '0' && *curr_char <= '9') {
+            // 记录数字个数
+            for (int move = i; *(first_char + move) >= '0' && *(first_char + move) <= '9' || *(first_char + move) == '.'; ++move) {
+                i = move;
+            }
+            num_count++;
+        } else if (*curr_char == '+' || *curr_char == '-' || *curr_char == '*' || *curr_char == '/') {
+            // 记录运算符个数
+            sign_count++;
+        } else if (*curr_char == '(') {
+            // 记录左括号个数
+            leftParenthesis_count++;
+        } else if (*curr_char == ')') {
+            // 记录右括号个数
+            rightParenthesis_count++;
+        } else {
+            return 0;
+        }
+    }
+    return num_count == (sign_count + 1) && leftParenthesis_count == rightParenthesis_count ? EXPRESSION_ISRTUE
+                                                                                            : EXPRESSION_ISFALSE;
+
+}
+// 3.5*2+(7-2)-1
 int judge_priority(char sign) {
     int resPriority = -1;
     switch (sign) {
@@ -57,6 +91,11 @@ double *start_cal(double right, double left, char sign) {
 }
 
 LINKLIST *convert_suffix(char expression[]) {
+    // 判断表达式合法性
+    if (judge_expression(expression) == 0) {
+        return NULL;
+    }
+
     // 初始化储存后缀式链表
     LINKLIST *linklist = init_calLink();
     // 初始化符号栈
